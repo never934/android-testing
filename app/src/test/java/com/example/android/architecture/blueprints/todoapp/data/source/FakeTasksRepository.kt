@@ -41,7 +41,7 @@ class FakeTasksRepository : TasksRepository {
     }
 
     override suspend fun completeTask(task: Task) {
-        TODO("Not yet implemented")
+        tasksServiceData[task.id]?.isCompleted = true
     }
 
     override suspend fun completeTask(taskId: String) {
