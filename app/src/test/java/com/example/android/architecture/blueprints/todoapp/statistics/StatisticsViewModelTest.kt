@@ -3,9 +3,13 @@ package com.example.android.architecture.blueprints.todoapp.statistics
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android.architecture.blueprints.todoapp.MainCoroutineRule
 import com.example.android.architecture.blueprints.todoapp.data.source.FakeTasksRepository
+import com.example.android.architecture.blueprints.todoapp.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.Is.`is`
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class StatisticsViewModelTest{
@@ -29,4 +33,12 @@ class StatisticsViewModelTest{
         statisticsViewModel = StatisticsViewModel(tasksRepository)
     }
 
+    @Test
+    fun loadTasks_loading(){
+        mainCoroutineRule.pauseDispatcher()
+        statisticsViewModel.refresh()
+        assertThat(statisticsViewModel.dataLoading.getOrAwaitValue(),`is`(true))
+        mainCoroutineRule.resumeDispatcher()
+        assertThat(statisticsViewModel.dataLoading.getOrAwaitValue(),`is`(false))
+    }
 }
